@@ -11,7 +11,7 @@ STR_COLOR_END='\033[m'
 playing_flug=1
 
 Wait(){
-    [ "$2" = '' ] && local waitTime=0.3s
+    [ "$2" = '' ] && local waitTime=0.1s
     [ "$2" != '' ] && local waitTime=$2
     local count=0
     while [ $count -lt ${#1} ]; do

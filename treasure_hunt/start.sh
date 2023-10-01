@@ -209,10 +209,10 @@ pooh_dir_num_second=$(($RANDOM % $num_second_max + 1))
 ## ドクロと同じfirstディレクトリにならないように制御
 while :
 do
-    pooh_dir_num_first=$(($RANDOM % $num_first_max + 1))
     if [ $pooh_dir_num_first -ne $dokuro_dir_num_first ]; then
         break
     fi
+    pooh_dir_num_first=$(($RANDOM % $num_first_max + 1))
 done
 cp items/pooh-wait.txt "START/tobira_${pooh_dir_num_first}/tobira_${pooh_dir_num_first}_${pooh_dir_num_second}/hiraite.txt"
 
@@ -222,7 +222,8 @@ do
     echo -n .
     pooh_friend_dir_num_first=$(($RANDOM % $num_first_max + 1))
     pooh_friend_dir_num_second=$(($RANDOM % $num_second_max + 1))
-    cp "items/pooh-friend-${i}.txt" "START/tobira_${pooh_friend_dir_num_first}/tobira_${pooh_friend_dir_num_first}_${pooh_friend_dir_num_second}/hiraite.txt"
+    # hiraite.txt（ドクロとポーさん）と重複しないファイル名にする。
+    cp "items/pooh-friend-${i}.txt" "START/tobira_${pooh_friend_dir_num_first}/tobira_${pooh_friend_dir_num_first}_${pooh_friend_dir_num_second}/friend-${i}.txt"
     # echo
     # echo "デバッグ"
     # echo "friend-${i}:  ${pooh_friend_dir_num_first}, ${pooh_friend_dir_num_second}"

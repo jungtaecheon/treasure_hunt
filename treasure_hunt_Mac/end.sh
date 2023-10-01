@@ -18,7 +18,7 @@ message_2=''
 message_3=''
 
 Wait(){
-    [ "$2" = '' ] && local waitTime=0.3s
+    [ "$2" = '' ] && local waitTime=0.3
     [ "$2" != '' ] && local waitTime=$2
     local count=0
     while [ $count -lt ${#1} ]; do

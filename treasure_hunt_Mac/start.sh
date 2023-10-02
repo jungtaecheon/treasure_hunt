@@ -219,8 +219,7 @@ for i in $(seq 1 4); do
     pooh_friend_dir_num_first=$((RANDOM % num_first_max + 1))
     pooh_friend_dir_num_second=$((RANDOM % num_second_max + 1))
     while :; do
-        ls START/tobira_${pooh_friend_dir_num_first}/tobira_${pooh_friend_dir_num_first}_${pooh_friend_dir_num_second} | grep hiraite.txt >/dev/null
-        if [ $? -ne 0 ]; then
+        if ! ls START/tobira_${pooh_friend_dir_num_first}/tobira_${pooh_friend_dir_num_first}_${pooh_friend_dir_num_second}/hiraite.txt 1>/dev/null 2>/dev/null; then
             break
         fi
 

@@ -30,22 +30,19 @@ Wait() {
 }
 
 judge_playing() {
-    ls | grep user_name_tmp >/dev/null
-    if [ $? -ne 0 ]; then
+    if ! ls user_name_tmp 1>/dev/null 2>/dev/null; then
         playing_flug=0
     else
         user_name=$(head -n 1 user_name_tmp)
     fi
 
-    ls | grep user_time_tmp >/dev/null
-    if [ $? -ne 0 ]; then
+    if ! ls user_time_tmp 1>/dev/null 2>/dev/null; then
         playing_flug=0
     else
         user_time=$(head -n 1 user_time_tmp)
     fi
 
-    ls | grep START >/dev/null
-    if [ $? -ne 0 ]; then
+    if ! ls START 1>/dev/null 2>/dev/null; then
         playing_flug=0
     fi
 }
@@ -58,8 +55,7 @@ calc_playing_time() {
 
 judge_clear() {
     # STARTディレクトリにdokuroが残ってるか
-    grep 'dokuro' -rl ./START 1>/dev/null 2>/dev/null
-    if [ $? -ne 0 ]; then
+    if ! grep 'dokuro' -rl ./START 1>/dev/null 2>/dev/null; then
         message_1='ドクロを削除しました > 成功!'
     else
         clear_flug=0
@@ -67,8 +63,7 @@ judge_clear() {
     fi
 
     # ポーさんを移動できたか
-    grep 'pooh' hiraite.txt 1>/dev/null 2>/dev/null
-    if [ $? -ne 0 ]; then
+    if ! grep 'pooh' hiraite.txt 1>/dev/null 2>/dev/null; then
         clear_flug=0
         message_2='ポーさんを移動していません > 失敗'
     else
@@ -84,8 +79,7 @@ judge_clear() {
     fi
 
     # 記録
-    ls ./record.txt 1>/dev/null 2>/dev/null
-    if [ $? -ne 0 ]; then
+    if ! ls ./record.txt 1>/dev/null 2>/dev/null; then
         touch ./record.txt
     fi
     {

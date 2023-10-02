@@ -88,13 +88,16 @@ judge_clear() {
     if [ $? -ne 0 ]; then
         touch ./record.txt
     fi
-    echo "=================================" >>./record.txt
-    echo "日付 : $now_date" >>./record.txt
-    echo "---------------------------------" >>./record.txt
-    echo "なまえ : $user_name" >>./record.txt
-    echo "---------------------------------" >>./record.txt
-    echo "かかった時間 : ${playing_time_sec} 秒 (${playing_time_min} 分)" >>./record.txt
-    echo "---------------------------------" >>./record.txt
+    {
+        echo "================================="
+        echo "日付 : $now_date"
+        echo "---------------------------------"
+        echo "なまえ : $user_name"
+        echo "---------------------------------"
+        echo "かかった時間 : ${playing_time_sec} 秒 (${playing_time_min} 分)"
+        echo "---------------------------------"
+    } >>./record.txt
+
     if [ $clear_flug -eq 1 ]; then
         echo "ミッション : 成功！" >>./record.txt
     else
@@ -182,7 +185,10 @@ echo
 echo
 echo
 echo '■ ヒント'
-echo "> 下のコマンドで記録を確認できるよ"
+echo "> 下のコマンドで、あとから過去の記録も確認できるよ"
 echo '========================================'
-echo ' cat record.txt'
+echo '  | コマンド         |      説明'
 echo '========================================'
+echo '1 | cat record.txt   | 記録を出力'
+echo '========================================'
+echo

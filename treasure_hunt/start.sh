@@ -15,7 +15,7 @@ Wait() {
     local count=0
     while [ $count -lt ${#1} ]; do
         local target="${1:$count:1}"
-        printf "$target"
+        printf "%s" "$target"
         ((count++))
         sleep "$waitTime"
     done
@@ -23,8 +23,8 @@ Wait() {
 
 input_user_name() {
     echo '> あなたの名前を入力し Enter を押してください'
-    read user_name
-    if [ -z $user_name ]; then
+    read -r user_name
+    if [ -z "$user_name" ]; then
         user_name='名無し'
     fi
 }
@@ -43,7 +43,9 @@ show_game_infomation() {
     echo "■ ミッション２"
     Wait "> ポーさんを見つけて、今いるこの場所に移動させること！（mv コマンド）"
     echo
-    Wait "ちなみに今いるこの場所はここだよ => "
+    echo
+    Wait "ちなみに今いるディレクトリのパス（場所）はここだよ => "
+    echo
     pwd
     sleep 1
     echo
@@ -53,22 +55,19 @@ show_game_infomation() {
 }
 
 judge_playing() {
-    ls | grep user_name_tmp >/dev/null
-    if [ $? -ne 0 ]; then
+    if ! ls user_name_tmp 1>/dev/null 2>/dev/null; then
         playing_flug=0
     else
         user_name=$(head -n 1 user_name_tmp)
     fi
 
-    ls | grep user_time_tmp >/dev/null
-    if [ $? -ne 0 ]; then
+    if ! ls user_time_tmp 1>/dev/null 2>/dev/null; then
         playing_flug=0
     else
         user_time=$(head -n 1 user_time_tmp)
     fi
 
-    ls | grep START >/dev/null
-    if [ $? -ne 0 ]; then
+    if ! ls START 1>/dev/null 2>/dev/null; then
         playing_flug=0
     fi
 }
@@ -106,7 +105,7 @@ else
     echo
 fi
 
-while read -p "> ゲームを開始しますか? [y/n] " yes_or_no; do
+while read -r -p "> ゲームを開始しますか? [y/n] " yes_or_no; do
     case ${yes_or_no} in
     [Yy] | [Yy][Ee][Ss])
         echo
@@ -129,7 +128,7 @@ done
 # ユーザー名入力
 input_user_name
 # ユーザー名入力確認
-while read -p "> あなたの名前は [${user_name}] でよろしいですか? [y/n] " yes_or_no; do
+while read -r -p "> あなたの名前は [${user_name}] でよろしいですか? [y/n] " yes_or_no; do
     case ${yes_or_no} in
     [Yy] | [Yy][Ee][Ss])
         echo ""
@@ -149,7 +148,7 @@ while read -p "> あなたの名前は [${user_name}] でよろしいですか? 
 done
 
 echo '[ゲーム開始]'
-while read -p "> ゲームの説明を聞きますか? [y/n] " yes_or_no; do
+while read -r -p "> ゲームの説明を聞きますか? [y/n] " yes_or_no; do
     case ${yes_or_no} in
     [Yy] | [Yy][Ee][Ss])
         show_game_infomation
@@ -193,50 +192,53 @@ for i in $(seq 1 ${num_first_max}); do
 done
 
 #ドクロ配置
-dokuro_dir_num_first=$(($RANDOM % $num_first_max + 1))
-dokuro_dir_num_second=$(($RANDOM % $num_second_max + 1))
+dokuro_dir_num_first=$((RANDOM % num_first_max + 1))
+dokuro_dir_num_second=$((RANDOM % num_second_max + 1))
 cp items/dokuro.txt "START/tobira_${dokuro_dir_num_first}/tobira_${dokuro_dir_num_first}_${dokuro_dir_num_second}/hiraite.txt"
 
 #ポーさん配置
-pooh_dir_num_first=$(($RANDOM % $num_first_max + 1))
-pooh_dir_num_second=$(($RANDOM % $num_second_max + 1))
+pooh_dir_num_first=$((RANDOM % num_first_max + 1))
+pooh_dir_num_second=$((RANDOM % num_second_max + 1))
 ## ドクロと同じfirstディレクトリにならないように制御
 while :; do
     if [ $pooh_dir_num_first -ne $dokuro_dir_num_first ]; then
         break
     fi
-    pooh_dir_num_first=$(($RANDOM % $num_first_max + 1))
+    pooh_dir_num_first=$((RANDOM % num_first_max + 1))
 done
 cp items/pooh-wait.txt "START/tobira_${pooh_dir_num_first}/tobira_${pooh_dir_num_first}_${pooh_dir_num_second}/hiraite.txt"
 
-echo
-echo "デバッグ"
-echo "dokuro : ${dokuro_dir_num_first}, ${dokuro_dir_num_second}"
-echo "pooh : ${pooh_dir_num_first}, ${pooh_dir_num_second}"
+# echo
+# echo "デバッグ"
+# echo "dokuro : ${dokuro_dir_num_first}, ${dokuro_dir_num_second}"
+# echo "pooh : ${pooh_dir_num_first}, ${pooh_dir_num_second}"
 
 #ポーさんともだち配置
 for i in $(seq 1 4); do
     printf .
-    pooh_friend_dir_num_first=$(($RANDOM % $num_first_max + 1))
-    pooh_friend_dir_num_second=$(($RANDOM % $num_second_max + 1))
+    pooh_friend_dir_num_first=$((RANDOM % num_first_max + 1))
+    pooh_friend_dir_num_second=$((RANDOM % num_second_max + 1))
     while :; do
         ls START/tobira_${pooh_friend_dir_num_first}/tobira_${pooh_friend_dir_num_first}_${pooh_friend_dir_num_second} | grep hiraite.txt >/dev/null
         if [ $? -ne 0 ]; then
             break
         fi
+
+        # echo
+        # echo "デバッグ"
+        # echo "重複を検知しました"
+        # echo "friend-${i}:  ${pooh_friend_dir_num_first}, ${pooh_friend_dir_num_second}"
+
         # もし既に同じディレクトリ内に hiraite.txt が存在する場合、ランダムな数字でディレクトリを出し直す
-        pooh_friend_dir_num_first=$(($RANDOM % $num_first_max + 1))
-        pooh_friend_dir_num_second=$(($RANDOM % $num_second_max + 1))
-        echo
-        echo "デバッグ"
-        echo "重複を検知しました"
-        echo "friend-${i}:  ${pooh_friend_dir_num_first}, ${pooh_friend_dir_num_second}"
+        pooh_friend_dir_num_first=$((RANDOM % num_first_max + 1))
+        pooh_friend_dir_num_second=$((RANDOM % num_second_max + 1))
     done
 
     cp "items/pooh-friend-${i}.txt" "START/tobira_${pooh_friend_dir_num_first}/tobira_${pooh_friend_dir_num_first}_${pooh_friend_dir_num_second}/hiraite.txt"
-    echo
-    echo "デバッグ"
-    echo "friend-${i}:  ${pooh_friend_dir_num_first}, ${pooh_friend_dir_num_second}"
+
+    # echo
+    # echo "デバッグ"
+    # echo "friend-${i}:  ${pooh_friend_dir_num_first}, ${pooh_friend_dir_num_second}"
 done
 
 echo

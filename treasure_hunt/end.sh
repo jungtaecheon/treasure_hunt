@@ -23,7 +23,7 @@ Wait() {
     local count=0
     while [ $count -lt ${#1} ]; do
         local target="${1:$count:1}"
-        printf "$target"
+        printf "%s" "$target"
         ((count++))
         sleep "$waitTime"
     done

@@ -275,5 +275,5 @@ echo
 Wait '> 今から時間をはかるよ、、、よーいスタート！'
 echo
 
-echo $user_name >user_name_tmp
-printf $(date +%s) >user_time_tmp
+printf "%s" "$user_name" >user_name_tmp
+printf "%s" "$(date +%s)" >user_time_tmp

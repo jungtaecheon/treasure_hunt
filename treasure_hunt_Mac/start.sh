@@ -244,7 +244,7 @@ echo
 echo
 Wait '■ 進め方１'
 echo
-echo "> ${STR_COLOR_BACK_YELLOW_START} まず最初は「START」ディレクトリに移動 ${STR_COLOR_END} してね"
+printf "> ${STR_COLOR_BACK_YELLOW_START} まず最初は「START」ディレクトリに移動 ${STR_COLOR_END}してね\n"
 echo '========================================'
 echo '  | コマンド    |           説明'
 echo '========================================'
@@ -263,7 +263,7 @@ echo '========================================'
 echo
 Wait '■ 進め方２'
 echo
-echo "> ミッションが${STR_COLOR_BACK_YELLOW_START} 終わったら下のコマンドでゴール ${STR_COLOR_END}だよ！"
+printf "> ミッションが${STR_COLOR_BACK_YELLOW_START} 終わったら下のコマンドでゴール ${STR_COLOR_END}だよ！\n"
 echo '========================================'
 echo '  | コマンド    |           説明'
 echo '========================================'

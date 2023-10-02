@@ -133,7 +133,7 @@ Wait "> ${user_name} さん、判定を始めます"
 
 calc_playing_time
 judge_clear
-sh reset.sh 1>/dev/null 2>/dev/null
+sh reset.sh auto_exec 1>/dev/null 2>/dev/null
 
 echo
 echo

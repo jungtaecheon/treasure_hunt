@@ -7,7 +7,11 @@ rm user_time_tmp 2>/dev/null
 
 rm hiraite.txt 2>/dev/null
 
-if [ $1 != 'start' ]; then
+if [ $# -ne 0 ] && [ $1 = 'auto_exec' ]; then
+    # ゲームスタート時
+    echo
+else
+    # 手動でresetスクリプト実行時
     while read -p "> 記録もすべて削除しますか? [y/n] " yes_or_no; do
         case ${yes_or_no} in
         [Yy] | [Yy][Ee][Ss])
@@ -27,6 +31,5 @@ if [ $1 != 'start' ]; then
             ;;
         esac
     done
+    echo 'ゲームをリセットしました。'
 fi
-
-echo 'データを初期化しました。'

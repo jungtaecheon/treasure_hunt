@@ -37,11 +37,11 @@ show_game_infomation() {
     echo
     echo
     echo "■ ミッション１"
-    Wait "> ポーさんを狙ってるドクロを見つけて削除すること！"
+    Wait "> ポーさんを狙ってるドクロを見つけて削除すること！（rm コマンド）"
     echo
     echo
     echo "■ ミッション２"
-    Wait "> ポーさんを見つけて、今いるこの場所に移動させること！"
+    Wait "> ポーさんを見つけて、今いるこの場所に移動させること！（mv コマンド）"
     echo
     Wait "ちなみに今いるこの場所はここだよ => "
     pwd
@@ -102,7 +102,7 @@ if [ $playing_flug -eq 1 ]; then
     exit
 else
     # 不要ファイル削除し、ゲームを開始する
-    sh reset.sh start
+    sh reset.sh auto_exec
     echo
 fi
 
@@ -209,22 +209,35 @@ while :; do
 done
 cp items/pooh-wait.txt "START/tobira_${pooh_dir_num_first}/tobira_${pooh_dir_num_first}_${pooh_dir_num_second}/hiraite.txt"
 
+echo
+echo "デバッグ"
+echo "dokuro : ${dokuro_dir_num_first}, ${dokuro_dir_num_second}"
+echo "pooh : ${pooh_dir_num_first}, ${pooh_dir_num_second}"
+
 #ポーさんともだち配置
 for i in $(seq 1 4); do
     printf .
     pooh_friend_dir_num_first=$(($RANDOM % $num_first_max + 1))
     pooh_friend_dir_num_second=$(($RANDOM % $num_second_max + 1))
-    # hiraite.txt（ドクロとポーさん）と重複しないファイル名にする。
-    cp "items/pooh-friend-${i}.txt" "START/tobira_${pooh_friend_dir_num_first}/tobira_${pooh_friend_dir_num_first}_${pooh_friend_dir_num_second}/friend-${i}.txt"
-    # echo
-    # echo "デバッグ"
-    # echo "friend-${i}:  ${pooh_friend_dir_num_first}, ${pooh_friend_dir_num_second}"
-done
+    while :; do
+        ls START/tobira_${pooh_friend_dir_num_first}/tobira_${pooh_friend_dir_num_first}_${pooh_friend_dir_num_second} | grep hiraite.txt >/dev/null
+        if [ $? -ne 0 ]; then
+            break
+        fi
+        # もし既に同じディレクトリ内に hiraite.txt が存在する場合、ランダムな数字でディレクトリを出し直す
+        pooh_friend_dir_num_first=$(($RANDOM % $num_first_max + 1))
+        pooh_friend_dir_num_second=$(($RANDOM % $num_second_max + 1))
+        echo
+        echo "デバッグ"
+        echo "重複を検知しました"
+        echo "friend-${i}:  ${pooh_friend_dir_num_first}, ${pooh_friend_dir_num_second}"
+    done
 
-# echo
-# echo "デバッグ"
-# echo "dokuro : ${dokuro_dir_num_first}, ${dokuro_dir_num_second}"
-# echo "pooh : ${pooh_dir_num_first}, ${pooh_dir_num_second}"
+    cp "items/pooh-friend-${i}.txt" "START/tobira_${pooh_friend_dir_num_first}/tobira_${pooh_friend_dir_num_first}_${pooh_friend_dir_num_second}/hiraite.txt"
+    echo
+    echo "デバッグ"
+    echo "friend-${i}:  ${pooh_friend_dir_num_first}, ${pooh_friend_dir_num_second}"
+done
 
 echo
 echo
@@ -234,13 +247,13 @@ echo -e "> ${STR_COLOR_BACK_YELLOW_START} まず最初は「START」ディレク
 echo '========================================'
 echo '  | コマンド    |           説明'
 echo '========================================'
-echo '1 | pwd         | 自分がいる場所を表示'
+echo '1 | pwd         | 現在のディレクトリのパス（場所）を表示'
 echo '----------------------------------------'
 echo '2 | ls          | 存在するファイルを表示'
 echo '----------------------------------------'
-echo '3 | cd          | 自分の場所を移動'
+echo '3 | cd          | ディレクトリに移動'
 echo '----------------------------------------'
-echo '4 | cat         | ファイルの中身確認'
+echo '4 | cat         | ファイルの中身を出力'
 echo '----------------------------------------'
 echo '5 | mv          | ファイルを移動'
 echo '----------------------------------------'
@@ -249,7 +262,7 @@ echo '========================================'
 echo
 Wait '■ 進め方２'
 echo
-echo -e "> ミッションが ${STR_COLOR_BACK_YELLOW_START} 終わったら ${STR_COLOR_END} 下のコマンドでゴールだよ！"
+echo -e "> ミッションが${STR_COLOR_BACK_YELLOW_START} 終わったら下のコマンドでゴール ${STR_COLOR_END}だよ！"
 echo '========================================'
 echo '  | コマンド    |           説明'
 echo '========================================'

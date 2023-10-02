@@ -23,7 +23,7 @@ Wait(){
     local count=0
     while [ $count -lt ${#1} ]; do
         local target="${1:$count:1}"
-        /bin/echo -n "$target"
+        printf "$target"
         ((count++))
         sleep "$waitTime"
     done
@@ -88,19 +88,19 @@ judge_clear(){
     if [ $? -ne 0 ]; then
         touch ./record.txt
     fi
-    /bin/echo "=================================" >> ./record.txt
-    /bin/echo "日付 : $now_date" >> ./record.txt
-    /bin/echo "---------------------------------" >> ./record.txt
-    /bin/echo "なまえ : $user_name" >> ./record.txt
-    /bin/echo "---------------------------------" >> ./record.txt
-    /bin/echo "かかった時間 : ${playing_time_sec} 秒 (${playing_time_min} 分)" >> ./record.txt
-    /bin/echo "---------------------------------" >> ./record.txt
+    echo "=================================" >> ./record.txt
+    echo "日付 : $now_date" >> ./record.txt
+    echo "---------------------------------" >> ./record.txt
+    echo "なまえ : $user_name" >> ./record.txt
+    echo "---------------------------------" >> ./record.txt
+    echo "かかった時間 : ${playing_time_sec} 秒 (${playing_time_min} 分)" >> ./record.txt
+    echo "---------------------------------" >> ./record.txt
     if [ $clear_flug -eq 1 ]; then
-        /bin/echo "ミッション : 成功！" >> ./record.txt
+        echo "ミッション : 成功！" >> ./record.txt
     else
-        /bin/echo "ミッション : 失敗" >> ./record.txt
+        echo "ミッション : 失敗" >> ./record.txt
     fi
-    /bin/echo "=================================" >> ./record.txt
+    echo "=================================" >> ./record.txt
 }
 
 
@@ -108,83 +108,83 @@ judge_clear(){
 judge_playing
 # 正常にプレイ中状態じゃない場合は、reset処理を実行
 if [ $playing_flug -ne 1 ]; then
-    /bin/echo
-    /bin/echo "[終了スクリプト失敗]"
-    /bin/echo "----------------------------------------"
-    /bin/echo "ゲームが正常に開始されてないです"
-    /bin/echo "> ゲームをプレイしてから実行してね！"
-    /bin/echo "----------------------------------------"
-    /bin/echo
-    /bin/echo
-    /bin/echo '■ ヒント'
-    /bin/echo "> 下のコマンドで新しくゲームをプレイできるよ"
-    /bin/echo '========================================'
-    /bin/echo ' sh start.sh'
-    /bin/echo '========================================'
+    echo
+    echo "[終了スクリプト失敗]"
+    echo "----------------------------------------"
+    echo "ゲームが正常に開始されてないです"
+    echo "> ゲームをプレイしてから実行してね！"
+    echo "----------------------------------------"
+    echo
+    echo
+    echo '■ ヒント'
+    echo "> 下のコマンドで新しくゲームをプレイできるよ"
+    echo '========================================'
+    echo ' sh start.sh'
+    echo '========================================'
 
     exit
 fi
 
-/bin/echo
-/bin/echo '********************************'
-/bin/echo
-/bin/echo '            ジャッジ'
-/bin/echo
-/bin/echo '********************************'
+echo
+echo '********************************'
+echo
+echo '            ジャッジ'
+echo
+echo '********************************'
 Wait "> ${user_name} さん、判定を始めます"
 
 calc_playing_time
 judge_clear
 sh reset.sh 1>/dev/null 2>/dev/null
 
-/bin/echo
-/bin/echo
-/bin/echo "■ ミッション１"
+echo
+echo
+echo "■ ミッション１"
 Wait "> ... ${message_1}"
-/bin/echo
-/bin/echo
-/bin/echo "■ ミッション２"
+echo
+echo
+echo "■ ミッション２"
 Wait "> ... ${message_2}"
-/bin/echo
-/bin/echo
-/bin/echo "■ ミッション３"
+echo
+echo
+echo "■ ミッション３"
 Wait "> ... ${message_3}"
-/bin/echo
-/bin/echo
-/bin/echo "■ かかった時間"
+echo
+echo
+echo "■ かかった時間"
 Wait "> ... ${playing_time_sec} 秒 (${playing_time_min} 分)"
-/bin/echo
-/bin/echo
+echo
+echo
 
 if [ $clear_flug -eq 1 ]; then
     cat items/pooh-clear-1.txt
     sleep 1
     cat items/pooh-clear-2.txt
     sleep 1
-    /bin/echo
-    /bin/echo
+    echo
+    echo
     cat items/success-text.txt
     sleep 1
-    /bin/echo
+    echo
 else
     cat items/boom.txt
     sleep 1
-    /bin/echo
-    /bin/echo
+    echo
+    echo
     cat items/pooh-angry.txt
     sleep 1
-    /bin/echo
-    /bin/echo
+    echo
+    echo
     cat items/fail-text.txt
     sleep 1
-    /bin/echo
+    echo
 fi
 
-/bin/echo
-/bin/echo
-/bin/echo
-/bin/echo '■ ヒント'
-/bin/echo "> 下のコマンドで記録を確認できるよ"
-/bin/echo '========================================'
-/bin/echo ' cat record.txt'
-/bin/echo '========================================'
+echo
+echo
+echo
+echo '■ ヒント'
+echo "> 下のコマンドで記録を確認できるよ"
+echo '========================================'
+echo ' cat record.txt'
+echo '========================================'

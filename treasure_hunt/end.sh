@@ -18,12 +18,12 @@ message_2=''
 message_3=''
 
 Wait(){
-    [ "$2" = '' ] && local waitTime=0.1s
+    [ "$2" = '' ] && local waitTime=0.1
     [ "$2" != '' ] && local waitTime=$2
     local count=0
     while [ $count -lt ${#1} ]; do
         local target="${1:$count:1}"
-        echo -n "$target"
+        printf "$target"
         ((count++))
         sleep "$waitTime"
     done

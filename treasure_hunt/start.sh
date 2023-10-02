@@ -5,18 +5,17 @@ user_time=0
 clear_limit_time=10
 
 STR_COLOR_BACK_YELLOW_START='\033[30;43;1m'
-STR_COLOR_POINT_START='\033[5m'
 STR_COLOR_END='\033[m'
 
 playing_flug=1
 
 Wait(){
-    [ "$2" = '' ] && local waitTime=0.1s
+    [ "$2" = '' ] && local waitTime=0.1
     [ "$2" != '' ] && local waitTime=$2
     local count=0
     while [ $count -lt ${#1} ]; do
         local target="${1:$count:1}"
-        echo -n "$target"
+        printf "$target"
         ((count++))
         sleep "$waitTime"
     done
@@ -173,7 +172,7 @@ done
 echo
 echo '[ファイルを生成中]'
 
-echo -n .
+printf .
 mkdir START
 
 num_first_max=5
@@ -182,7 +181,7 @@ num_second_max=5
 # first
 for i in `seq 1 ${num_first_max}`
 do
-    echo -n .
+    printf .
     mkdir "START/tobira_${i}"
 done
 
@@ -192,7 +191,7 @@ do
     # second
     for j in `seq 1 ${num_second_max}`
     do
-    echo -n .
+    printf .
         mkdir "START/tobira_${i}/tobira_${i}_${j}"
     done
 done
@@ -219,7 +218,7 @@ cp items/pooh-wait.txt "START/tobira_${pooh_dir_num_first}/tobira_${pooh_dir_num
 #ポーさんともだち配置
 for i in `seq 1 4`
 do
-    echo -n .
+    printf .
     pooh_friend_dir_num_first=$(($RANDOM % $num_first_max + 1))
     pooh_friend_dir_num_second=$(($RANDOM % $num_second_max + 1))
     # hiraite.txt（ドクロとポーさん）と重複しないファイル名にする。
@@ -271,4 +270,4 @@ Wait '> 今から時間をはかるよ、、、よーいスタート！'
 echo
 
 echo $user_name > user_name_tmp
-echo -n `date +%s` > user_time_tmp
+printf `date +%s` > user_time_tmp

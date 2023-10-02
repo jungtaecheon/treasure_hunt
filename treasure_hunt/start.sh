@@ -9,7 +9,7 @@ STR_COLOR_END='\033[m'
 
 playing_flug=1
 
-Wait(){
+Wait() {
     [ "$2" = '' ] && local waitTime=0.1
     [ "$2" != '' ] && local waitTime=$2
     local count=0
@@ -21,7 +21,7 @@ Wait(){
     done
 }
 
-input_user_name(){
+input_user_name() {
     echo '> あなたの名前を入力し Enter を押してください'
     read user_name
     if [ -z $user_name ]; then
@@ -29,7 +29,7 @@ input_user_name(){
     fi
 }
 
-show_game_infomation(){
+show_game_infomation() {
     echo
     Wait "> ${user_name} さん"
     echo
@@ -52,19 +52,19 @@ show_game_infomation(){
     echo
 }
 
-judge_playing(){
+judge_playing() {
     ls | grep user_name_tmp >/dev/null
     if [ $? -ne 0 ]; then
         playing_flug=0
     else
-        user_name=`head -n 1 user_name_tmp`
+        user_name=$(head -n 1 user_name_tmp)
     fi
 
     ls | grep user_time_tmp >/dev/null
     if [ $? -ne 0 ]; then
         playing_flug=0
     else
-        user_time=`head -n 1 user_time_tmp`
+        user_time=$(head -n 1 user_time_tmp)
     fi
 
     ls | grep START >/dev/null
@@ -77,9 +77,9 @@ judge_playing(){
 judge_playing
 
 if [ $playing_flug -eq 1 ]; then
-    now_time=`date +%s`
-    playing_time_sec=$((now_time-user_time))
-    playing_time_min=$((playing_time_sec/60))
+    now_time=$(date +%s)
+    playing_time_sec=$((now_time - user_time))
+    playing_time_min=$((playing_time_sec / 60))
     echo
     cat items/playing-text.txt
     echo
@@ -102,27 +102,26 @@ if [ $playing_flug -eq 1 ]; then
     exit
 else
     # 不要ファイル削除し、ゲームを開始する
-    sh reset.sh
+    sh reset.sh start
     echo
 fi
 
-
-while read -p "> ゲームを開始しますか? [y/n] " yes_or_no ; do
+while read -p "> ゲームを開始しますか? [y/n] " yes_or_no; do
     case ${yes_or_no} in
-        [Yy]|[Yy][Ee][Ss] )
-            echo
-            break
+    [Yy] | [Yy][Ee][Ss])
+        echo
+        break
         ;;
 
-        [Nn]|[Nn][Oo] )
-            echo
-            Wait '> Bye...!'
-            exit
+    [Nn] | [Nn][Oo])
+        echo
+        Wait '> Bye...!'
+        exit
         ;;
 
-        * )
-            echo
-            echo "> yes か no かでこたえてほしいのです!"
+    *)
+        echo
+        echo "> yes か no かでこたえてほしいのです!"
         ;;
     esac
 done
@@ -130,42 +129,42 @@ done
 # ユーザー名入力
 input_user_name
 # ユーザー名入力確認
-while read -p "> あなたの名前は [${user_name}] でよろしいですか? [y/n] " yes_or_no ; do
+while read -p "> あなたの名前は [${user_name}] でよろしいですか? [y/n] " yes_or_no; do
     case ${yes_or_no} in
-        [Yy]|[Yy][Ee][Ss] )
-            echo ""
-            break
+    [Yy] | [Yy][Ee][Ss])
+        echo ""
+        break
         ;;
 
-        [Nn]|[Nn][Oo] )
-            echo
-            input_user_name
+    [Nn] | [Nn][Oo])
+        echo
+        input_user_name
         ;;
 
-        * )
-            echo
-            echo "> yes か no かでこたえてほしいのです!"
+    *)
+        echo
+        echo "> yes か no かでこたえてほしいのです!"
         ;;
     esac
 done
 
 echo '[ゲーム開始]'
-while read -p "> ゲームの説明を聞きますか? [y/n] " yes_or_no ; do
+while read -p "> ゲームの説明を聞きますか? [y/n] " yes_or_no; do
     case ${yes_or_no} in
-        [Yy]|[Yy][Ee][Ss] )
-            show_game_infomation
-            break
+    [Yy] | [Yy][Ee][Ss])
+        show_game_infomation
+        break
         ;;
 
-        [Nn]|[Nn][Oo] )
-            echo
-            echo '説明をスキップします。'
-            break
+    [Nn] | [Nn][Oo])
+        echo
+        echo '説明をスキップします。'
+        break
         ;;
 
-        * )
-            echo
-            echo "> yes か no かでこたえてほしいのです!"
+    *)
+        echo
+        echo "> yes か no かでこたえてほしいのです!"
         ;;
     esac
 done
@@ -179,23 +178,19 @@ num_first_max=5
 num_second_max=5
 
 # first
-for i in `seq 1 ${num_first_max}`
-do
+for i in $(seq 1 ${num_first_max}); do
     printf .
     mkdir "START/tobira_${i}"
 done
 
 # first
-for i in `seq 1 ${num_first_max}`
-do
+for i in $(seq 1 ${num_first_max}); do
     # second
-    for j in `seq 1 ${num_second_max}`
-    do
-    printf .
+    for j in $(seq 1 ${num_second_max}); do
+        printf .
         mkdir "START/tobira_${i}/tobira_${i}_${j}"
     done
 done
-
 
 #ドクロ配置
 dokuro_dir_num_first=$(($RANDOM % $num_first_max + 1))
@@ -206,8 +201,7 @@ cp items/dokuro.txt "START/tobira_${dokuro_dir_num_first}/tobira_${dokuro_dir_nu
 pooh_dir_num_first=$(($RANDOM % $num_first_max + 1))
 pooh_dir_num_second=$(($RANDOM % $num_second_max + 1))
 ## ドクロと同じfirstディレクトリにならないように制御
-while :
-do
+while :; do
     if [ $pooh_dir_num_first -ne $dokuro_dir_num_first ]; then
         break
     fi
@@ -216,8 +210,7 @@ done
 cp items/pooh-wait.txt "START/tobira_${pooh_dir_num_first}/tobira_${pooh_dir_num_first}_${pooh_dir_num_second}/hiraite.txt"
 
 #ポーさんともだち配置
-for i in `seq 1 4`
-do
+for i in $(seq 1 4); do
     printf .
     pooh_friend_dir_num_first=$(($RANDOM % $num_first_max + 1))
     pooh_friend_dir_num_second=$(($RANDOM % $num_second_max + 1))
@@ -235,9 +228,9 @@ done
 
 echo
 echo
-Wait '■ ヒント１'
+Wait '■ 進め方１'
 echo
-echo -e "> まずは下のコマンドを使って ${STR_COLOR_BACK_YELLOW_START} START ディレクトリに移動 ${STR_COLOR_END} をしてみてね"
+echo -e "> ${STR_COLOR_BACK_YELLOW_START} まず最初は「START」ディレクトリに移動 ${STR_COLOR_END} してね"
 echo '========================================'
 echo '  | コマンド    |           説明'
 echo '========================================'
@@ -254,7 +247,7 @@ echo '----------------------------------------'
 echo '6 | rm          | ファイルを削除'
 echo '========================================'
 echo
-Wait '■ ヒント２'
+Wait '■ 進め方２'
 echo
 echo -e "> ミッションが ${STR_COLOR_BACK_YELLOW_START} 終わったら ${STR_COLOR_END} 下のコマンドでゴールだよ！"
 echo '========================================'
@@ -264,10 +257,10 @@ echo '1 | sh end.sh   | 終了スクリプト実行'
 echo '========================================'
 echo
 echo
-Wait '> 最初は、ヒントをよく確認しならがら進めてみよう！'
+Wait '> 最初は、進め方をよく確認しならがら進めてみよう！'
 echo
 Wait '> 今から時間をはかるよ、、、よーいスタート！'
 echo
 
-echo $user_name > user_name_tmp
-printf `date +%s` > user_time_tmp
+echo $user_name >user_name_tmp
+printf $(date +%s) >user_time_tmp

@@ -8,7 +8,7 @@ clear_limit_time=10
 user_name=''
 user_time=0
 
-now_date=`date '+%Y-%m-%d %H:%M:%S'`
+now_date=$(date '+%Y-%m-%d %H:%M:%S')
 
 playing_time_sec=0
 playing_time_min=0
@@ -17,7 +17,7 @@ message_1=''
 message_2=''
 message_3=''
 
-Wait(){
+Wait() {
     [ "$2" = '' ] && local waitTime=0.1
     [ "$2" != '' ] && local waitTime=$2
     local count=0
@@ -29,19 +29,19 @@ Wait(){
     done
 }
 
-judge_playing(){
+judge_playing() {
     ls | grep user_name_tmp >/dev/null
     if [ $? -ne 0 ]; then
         playing_flug=0
     else
-        user_name=`head -n 1 user_name_tmp`
+        user_name=$(head -n 1 user_name_tmp)
     fi
 
     ls | grep user_time_tmp >/dev/null
     if [ $? -ne 0 ]; then
         playing_flug=0
     else
-        user_time=`head -n 1 user_time_tmp`
+        user_time=$(head -n 1 user_time_tmp)
     fi
 
     ls | grep START >/dev/null
@@ -50,13 +50,13 @@ judge_playing(){
     fi
 }
 
-calc_playing_time(){
-    now_time=`date +%s`
-    playing_time_sec=$((now_time-user_time))
-    playing_time_min=$((playing_time_sec/60))
+calc_playing_time() {
+    now_time=$(date +%s)
+    playing_time_sec=$((now_time - user_time))
+    playing_time_min=$((playing_time_sec / 60))
 }
 
-judge_clear(){
+judge_clear() {
     # STARTディレクトリにdokuroが残ってるか
     grep 'dokuro' -rl ./START 1>/dev/null 2>/dev/null
     if [ $? -ne 0 ]; then
@@ -88,22 +88,20 @@ judge_clear(){
     if [ $? -ne 0 ]; then
         touch ./record.txt
     fi
-    echo "=================================" >> ./record.txt
-    echo "日付 : $now_date" >> ./record.txt
-    echo "---------------------------------" >> ./record.txt
-    echo "なまえ : $user_name" >> ./record.txt
-    echo "---------------------------------" >> ./record.txt
-    echo "かかった時間 : ${playing_time_sec} 秒 (${playing_time_min} 分)" >> ./record.txt
-    echo "---------------------------------" >> ./record.txt
+    echo "=================================" >>./record.txt
+    echo "日付 : $now_date" >>./record.txt
+    echo "---------------------------------" >>./record.txt
+    echo "なまえ : $user_name" >>./record.txt
+    echo "---------------------------------" >>./record.txt
+    echo "かかった時間 : ${playing_time_sec} 秒 (${playing_time_min} 分)" >>./record.txt
+    echo "---------------------------------" >>./record.txt
     if [ $clear_flug -eq 1 ]; then
-        echo "ミッション : 成功！" >> ./record.txt
+        echo "ミッション : 成功！" >>./record.txt
     else
-        echo "ミッション : 失敗" >> ./record.txt
+        echo "ミッション : 失敗" >>./record.txt
     fi
-    echo "=================================" >> ./record.txt
+    echo "=================================" >>./record.txt
 }
-
-
 
 judge_playing
 # 正常にプレイ中状態じゃない場合は、reset処理を実行

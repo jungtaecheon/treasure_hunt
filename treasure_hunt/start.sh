@@ -46,8 +46,7 @@ show_game_infomation() {
     echo
     Wait "ちなみに今いるディレクトリのパス（場所）はここだよ => "
     echo
-    pwd
-    sleep 1
+    printf "> ${STR_COLOR_BACK_YELLOW_START} $(pwd) ${STR_COLOR_END}\n"
     echo
     echo "■ ミッション３"
     Wait "> ${clear_limit_time}分以内にゲーム終了すること！"

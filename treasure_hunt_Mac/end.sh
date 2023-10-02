@@ -151,6 +151,7 @@ Wait "> ... ${playing_time_sec} 秒 (${playing_time_min} 分)"
 echo
 echo
 
+sleep 1
 if [ $clear_flug -eq 1 ]; then
     cat items/pooh-clear-1.txt
     sleep 1

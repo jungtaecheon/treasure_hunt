@@ -7,12 +7,12 @@ rm user_time_tmp 2>/dev/null
 
 rm hiraite.txt 2>/dev/null
 
-if [ $# -ne 0 ] && [ $1 = 'auto_exec' ]; then
+if [ $# -ne 0 ] && [ "$1" = 'auto_exec' ]; then
     # ゲームスタート時
     echo
 else
     # 手動でresetスクリプト実行時
-    while read -p "> 記録もすべて削除しますか? [y/n] " yes_or_no; do
+    while read -r -p "> 記録もすべて削除しますか? [y/n] " yes_or_no; do
         case ${yes_or_no} in
         [Yy] | [Yy][Ee][Ss])
             rm record.txt 2>/dev/null
